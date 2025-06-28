@@ -11,9 +11,11 @@ export function getTokenFromUrl() {
         .find(e => e.startsWith('access_token'))
         ?.split('=')[1];
 
-    // Limpa o fragmento da URL
-    window.location.hash = '';
-    return token;
+    const decodedToken = decodeURIComponent(token);
+    console.log("TOKEN EXTRAÍDO:", decodedToken); // ← debug temporário
+
+    window.location.hash = ''; // limpa o hash da URL
+    return decodedToken;
 }
 
 // Lê o token armazenado localmente
