@@ -1,1 +1,43 @@
-node_modules
+# -------------------------
+# Node.js / Express (Backend)
+# -------------------------
+backend/node_modules/
+backend/.env
+backend/.DS_Store
+backend/npm-debug.log*
+
+# -------------------------
+# React (Frontend)
+# -------------------------
+cliente/node_modules/
+cliente/.env
+cliente/.DS_Store
+cliente/build/
+cliente/npm-debug.log*
+
+# -------------------------
+# Common for both
+# -------------------------
+node_modules/
+*.log
+.env
+.env.local
+.env.*.local
+.DS_Store
+dist/
+.vscode/
+*.swp
+*.swo
+.cache/
+coverage/
+.idea/
+.next/
+out/
+
+# Optional: OS/Editor specific
+Thumbs.db
+*.sublime-workspace
+*.sublime-project
+
+# Ignore production builds (if any)
+build/

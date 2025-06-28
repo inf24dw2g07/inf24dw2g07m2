@@ -7,10 +7,14 @@ function Callback() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
+    const refreshToken = params.get("refresh_token");
 
     if (token) {
-      localStorage.setItem("token", token); // Armazena o token
-      navigate("/"); // Redireciona para a página inicial
+      localStorage.setItem("token", token);
+      if (refreshToken) {
+        localStorage.setItem("refresh_token", refreshToken);
+      }
+      navigate("/");
     } else {
       console.log(" Token não recebido.");
     }
@@ -24,4 +28,3 @@ function Callback() {
 }
 
 export default Callback;
-

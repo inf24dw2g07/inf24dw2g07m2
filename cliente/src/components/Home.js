@@ -3,21 +3,30 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getToken, clearToken } from "../utils/auth";
+import { getToken, clearToken, renewToken } from "../utils/auth";
 
 function Home() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Verifica se há token armazenado
+  // Verifica se há token ou renova, se necessário
   useEffect(() => {
-    const storedToken = getToken();
-    if (!storedToken) {
-      navigate("/login");
-    } else {
-      setToken(storedToken);
+    async function checkToken() {
+      let storedToken = getToken();
+
+      if (!storedToken) {
+        storedToken = await renewToken();
+      }
+
+      if (!storedToken) {
+        navigate("/login");
+      } else {
+        setToken(storedToken);
+      }
     }
+
+    checkToken();
   }, [navigate]);
 
   // Busca dados do usuário no Spotify
@@ -76,4 +85,5 @@ function Home() {
 }
 
 export default Home;
+
 
