@@ -33,7 +33,7 @@ INF24DW2G07M2/
 ├── node_modules/              Dependências do projeto raiz (caso uses nodemon ou outras libs globais)
 ├── .gitignore                 Ignora `node_modules`, `.env`, etc.
 ├── package.json               (raiz, se usado para ferramentas do projeto geral)
-├── README.md                  Manual de instalação e instruções — está na raiz, correto ✔️
+├── README.md                  Manual de instalação e instruções — está na raiz, correto.
 ```
 
 ---
