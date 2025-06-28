@@ -1,21 +1,24 @@
-// Home.jsx
+// src/pages/Home.js
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getToken, clearToken } from "../utils/auth";
 
 function Home() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Captura o token da URL
+  // Verifica se há token armazenado
   useEffect(() => {
-    const hash = new URLSearchParams(window.location.search);
-    const _token = hash.get("access_token");
-    if (_token) {
-      setToken(_token);
+    const storedToken = getToken();
+    if (!storedToken) {
+      navigate("/login");
+    } else {
+      setToken(storedToken);
     }
-  }, []);
+  }, [navigate]);
 
   // Busca dados do usuário no Spotify
   useEffect(() => {
@@ -25,9 +28,13 @@ function Home() {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => setUser(res.data))
-        .catch((err) => console.error("Erro ao buscar usuário", err));
+        .catch((err) => {
+          console.error("Erro ao buscar usuário", err);
+          clearToken();
+          navigate("/login");
+        });
     }
-  }, [token]);
+  }, [token, navigate]);
 
   // Envia dados para o back-end
   const registerUser = async () => {
@@ -44,16 +51,6 @@ function Home() {
     }
   };
 
-  // Tela de login inicial
-  if (!token) {
-    return (
-      <div className="container">
-        <h1>Spotify React App</h1>
-        <a href="http://localhost:5000/login">Login com Spotify</a>
-      </div>
-    );
-  }
-
   // Aguarda os dados do usuário carregarem
   if (!user) return <p className="container">Carregando dados do usuário...</p>;
 
@@ -67,8 +64,16 @@ function Home() {
         <img src={user.images[0].url} alt="Avatar" width={100} />
       )}
       <button onClick={registerUser}>Finalizar Cadastro</button>
+      <br /><br />
+      <button onClick={() => {
+        clearToken();
+        navigate("/login");
+      }}>
+        Logout
+      </button>
     </div>
   );
 }
 
 export default Home;
+
