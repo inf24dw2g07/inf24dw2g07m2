@@ -67,7 +67,7 @@ REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:5000/login
 ```bash
 cd backend
 npm install
-node index.js
+docker-compose up --build
 ```
 
 O servidor será iniciado em: [http://localhost:5000](http://localhost:5000)
