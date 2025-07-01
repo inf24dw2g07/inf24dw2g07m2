@@ -7,6 +7,23 @@ function TopArtistas() {
   const [artistas, setArtistas] = useState([]);
   const navigate = useNavigate();
 
+  const salvarArtistasNoBanco = async () => {
+    const artistasConvertidos = artistas.map((item) => ({
+      nome: item.name,
+      genero: item.genres[0] || "Desconhecido",
+      imagemURL: item.images?.[0]?.url || "",
+    }));
+
+    try {
+      const response = await axios.post("http://localhost:5000/artistas", artistasConvertidos);
+      console.log("🎉 Artistas salvos no banco:", response.data);
+      alert("Artistas salvos com sucesso!");
+    } catch (error) {
+      console.error(" Erro ao salvar artistas no banco:", error);
+      alert("Erro ao salvar artistas no banco.");
+    }
+  };
+
   useEffect(() => {
     const fetchTopArtistas = async () => {
       let token = getToken();
@@ -27,6 +44,7 @@ function TopArtistas() {
           }
         );
         setArtistas(res.data.items);
+        // salvarArtistasNoBanco(); // descomente aqui se quiser salvar automaticamente
       } catch (err) {
         console.error("Erro ao buscar top artistas:", err);
         clearToken();
@@ -39,8 +57,25 @@ function TopArtistas() {
 
   return (
     <div className="container">
-      <h1> Top 10 Artistas Mais Ouvidos</h1>
-      <ul style={{ listStyle: "none", padding: 0, marginTop: "2rem" }}>
+      <h1>Top 10 Artistas Mais Ouvidos</h1>
+
+      <button
+        onClick={salvarArtistasNoBanco}
+        style={{
+          backgroundColor: "#1DB954",
+          color: "white",
+          border: "none",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontSize: "1rem",
+          marginBottom: "2rem"
+        }}
+      >
+        Salvar artistas no banco
+      </button>
+
+      <ul style={{ listStyle: "none", padding: 0 }}>
         {artistas.map((artista) => (
           <li
             key={artista.id}
