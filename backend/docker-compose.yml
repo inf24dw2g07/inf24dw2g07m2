@@ -9,21 +9,21 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: spotifydb
     ports:
-      - "3307:3306"   # Porta local 3307 para 3306 do container
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 
   spotify-api:
     build:
-      context: ..               # Contexto: pasta raiz do projeto (INF24DW2G07M2)
-      dockerfile: Dockerfile    # Dockerfile na raiz
+      context: .
+      dockerfile: Dockerfile
     container_name: spotify-api
     restart: always
     ports:
       - "5000:5000"
     volumes:
-      - ../backend:/app/backend    # Monta a pasta backend do host na /app/backend do container
-    working_dir: /app/backend
+      - ./:/app
+    working_dir: /app
     depends_on:
       - mysql-db
     environment:
@@ -34,6 +34,19 @@ services:
       DB_PORT: 3306
       DB_DIALECT: mysql
       NODE_ENV: development
+
+  spotify-frontend:
+    build:
+      context: ../cliente
+      dockerfile: Dockerfile
+    container_name: spotify-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - spotify-api
+    environment:
+      REACT_APP_API_URL: http://localhost:5000
 
 volumes:
   mysql-data:
