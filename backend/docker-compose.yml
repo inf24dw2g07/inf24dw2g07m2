@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: spotifydb
+    ports:
+      - "3307:3306"   # Porta local 3307 para 3306 do container
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  spotify-api:
+    build:
+      context: ..               # Contexto: pasta raiz do projeto (INF24DW2G07M2)
+      dockerfile: Dockerfile    # Dockerfile na raiz
+    container_name: spotify-api
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../backend:/app/backend    # Monta a pasta backend do host na /app/backend do container
+    working_dir: /app/backend
+    depends_on:
+      - mysql-db
+    environment:
+      DB_HOST: mysql-db
+      DB_USER: root
+      DB_PASSWORD: 123456
+      DB_NAME: spotifydb
+      DB_PORT: 3306
+      DB_DIALECT: mysql
+      NODE_ENV: development
+
+volumes:
+  mysql-data:

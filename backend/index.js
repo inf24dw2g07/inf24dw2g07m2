@@ -14,6 +14,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Rota raiz para teste básico
+app.get('/', (req, res) => {
+  console.log('Recebido GET /');
+  res.send('API funcionando!');
+});
+
 // Rotas REST personalizadas
 app.use('/artistas', artistasRoutes);
 
@@ -117,3 +123,4 @@ db.sequelize.sync().then(() => {
     console.log('Servidor backend rodando em http://localhost:5000');
   });
 });
+
