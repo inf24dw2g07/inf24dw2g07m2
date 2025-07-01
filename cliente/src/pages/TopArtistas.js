@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken, renewToken, clearToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import CardItem from "../components/CardItem";
 
 function TopArtistas() {
   const [artistas, setArtistas] = useState([]);
@@ -15,11 +16,14 @@ function TopArtistas() {
     }));
 
     try {
-      const response = await axios.post("http://localhost:5000/artistas", artistasConvertidos);
+      const response = await axios.post(
+        "http://localhost:5000/artistas",
+        artistasConvertidos
+      );
       console.log("🎉 Artistas salvos no banco:", response.data);
       alert("Artistas salvos com sucesso!");
     } catch (error) {
-      console.error(" Erro ao salvar artistas no banco:", error);
+      console.error("Erro ao salvar artistas no banco:", error);
       alert("Erro ao salvar artistas no banco.");
     }
   };
@@ -44,7 +48,6 @@ function TopArtistas() {
           }
         );
         setArtistas(res.data.items);
-        // salvarArtistasNoBanco(); // descomente aqui se quiser salvar automaticamente
       } catch (err) {
         console.error("Erro ao buscar top artistas:", err);
         clearToken();
@@ -56,52 +59,24 @@ function TopArtistas() {
   }, [navigate]);
 
   return (
-    <div className="container">
-      <h1>Top 10 Artistas Mais Ouvidos</h1>
+    <div className="min-h-screen px-6 py-8 bg-zinc-900 text-white">
+      <h1 className="text-3xl font-bold mb-6 mt-4">Top 10 Artistas Mais Ouvidos</h1>
 
       <button
         onClick={salvarArtistasNoBanco}
-        style={{
-          backgroundColor: "#1DB954",
-          color: "white",
-          border: "none",
-          padding: "10px 20px",
-          borderRadius: "8px",
-          cursor: "pointer",
-          fontSize: "1rem",
-          marginBottom: "2rem"
-        }}
+        className="mb-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
       >
         Salvar artistas no banco
       </button>
 
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      <ul className="space-y-4">
         {artistas.map((artista) => (
-          <li
+          <CardItem
             key={artista.id}
-            style={{
-              backgroundColor: "#2a2a2a",
-              padding: "15px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            {artista.images[0] && (
-              <img
-                src={artista.images[0].url}
-                alt={artista.name}
-                width={60}
-                height={60}
-                style={{ borderRadius: "50%", objectFit: "cover" }}
-              />
-            )}
-            <span style={{ marginLeft: "15px", fontSize: "1.1rem" }}>
-              {artista.name}
-            </span>
-          </li>
+            title={artista.name}
+            subtitle={artista.genres?.[0]}
+            image={artista.images?.[0]?.url}
+          />
         ))}
       </ul>
     </div>

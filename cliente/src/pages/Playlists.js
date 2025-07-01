@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken, renewToken, clearToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import CardItem from "../components/CardItem";
 
 function Playlists() {
   const [playlists, setPlaylists] = useState([]);
@@ -38,35 +39,17 @@ function Playlists() {
   }, [navigate]);
 
   return (
-    <div className="container">
-      <h1> Minhas Playlists</h1>
-      <ul style={{ listStyle: "none", padding: 0, marginTop: "2rem" }}>
+    <div className="min-h-screen px-6 py-8 bg-zinc-900 text-white">
+      <h1 className="text-3xl font-bold mb-6 mt-4">Minhas Playlists</h1>
+
+      <ul className="space-y-4">
         {playlists.map((playlist) => (
-          <li
+          <CardItem
             key={playlist.id}
-            style={{
-              backgroundColor: "#2a2a2a",
-              padding: "15px",
-              marginBottom: "10px",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            {playlist.images[0] && (
-              <img
-                src={playlist.images[0].url}
-                alt={playlist.name}
-                width={60}
-                height={60}
-                style={{ borderRadius: "8px", objectFit: "cover" }}
-              />
-            )}
-            <span style={{ marginLeft: "15px", fontSize: "1.1rem" }}>
-              {playlist.name}
-            </span>
-          </li>
+            title={playlist.name}
+            subtitle={`${playlist.tracks.total} músicas`}
+            image={playlist.images?.[0]?.url}
+          />
         ))}
       </ul>
     </div>

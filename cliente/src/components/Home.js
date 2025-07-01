@@ -1,5 +1,3 @@
-// src/pages/Home.js
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +8,6 @@ function Home() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Verifica se há token ou renova, se necessário
   useEffect(() => {
     async function checkToken() {
       let storedToken = getToken();
@@ -29,7 +26,6 @@ function Home() {
     checkToken();
   }, [navigate]);
 
-  // Busca dados do usuário no Spotify
   useEffect(() => {
     if (token) {
       axios
@@ -45,7 +41,6 @@ function Home() {
     }
   }, [token, navigate]);
 
-  // Envia dados para o back-end
   const registerUser = async () => {
     try {
       await axios.post("http://localhost:5000/register", {
@@ -60,30 +55,100 @@ function Home() {
     }
   };
 
-  // Aguarda os dados do usuário carregarem
-  if (!user) return <p className="container">Carregando dados do usuário...</p>;
-
-  // Tela de cadastro
-  return (
-    <div className="container">
-      <h1>Cadastro na Aplicação</h1>
-      <p>Bem-vindo, {user.display_name}!</p>
-      <p>Email: {user.email}</p>
-      {user.images.length > 0 && (
-        <img src={user.images[0].url} alt="Avatar" width={100} />
-      )}
-      <button onClick={registerUser}>Finalizar Cadastro</button>
-      <br /><br />
-      <button onClick={() => {
-        clearToken();
-        navigate("/login");
+  if (!user) {
+    return (
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#111",
+        color: "#fff"
       }}>
-        Logout
-      </button>
+        <p style={{ fontSize: "20px" }}>Carregando dados do usuário...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#111",
+      color: "#fff",
+      padding: "20px",
+    }}>
+      <div style={{
+        backgroundColor: "#222",
+        padding: "30px",
+        borderRadius: "10px",
+        textAlign: "center",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.5)",
+        width: "100%",
+        maxWidth: "400px"
+      }}>
+        <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>Cadastro na Aplicação</h1>
+        <p style={{ fontSize: "18px" }}>
+          Bem-vindo, <strong>{user.display_name}</strong>!
+        </p>
+        <p style={{ fontSize: "14px", color: "#ccc" }}>{user.email}</p>
+
+        {user.images.length > 0 && (
+          <img
+            src={user.images[0].url}
+            alt="Avatar"
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              marginTop: "20px",
+              marginBottom: "20px",
+              border: "3px solid #444"
+            }}
+          />
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <button
+            onClick={registerUser}
+            style={{
+              backgroundColor: "#22c55e",
+              color: "white",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            Finalizar Cadastro
+          </button>
+          <button
+            onClick={() => {
+              clearToken();
+              navigate("/login");
+            }}
+            style={{
+              backgroundColor: "#ef4444",
+              color: "white",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default Home;
+
+
 
 

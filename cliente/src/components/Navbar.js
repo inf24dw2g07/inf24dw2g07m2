@@ -22,7 +22,7 @@ function Navbar() {
         <Link to="/" style={styles.link}>Início</Link>
         <Link to="/usuarios" style={styles.link}>Usuários</Link>
         <Link to="/perfil" style={styles.link}>Meu Perfil</Link>
-        <Link to="/top-artistas" style={styles.link}>Top Artistas</Link>
+        <Link to="/topartistas" style={styles.link}>Top Artistas</Link>
         <Link to="/playlists" style={styles.link}>Playlists</Link>
       </div>
       <div style={styles.right}>
