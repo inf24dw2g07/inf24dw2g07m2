@@ -60,6 +60,7 @@ CLIENT_SECRET=b7f1d1abf70c49468c7aebdea5cb25a8
 REDIRECT_URI=http://localhost:5000/callback
 FRONTEND_URI=http://localhost:3000
 
+
 DB_HOST=mysql-db
 DB_USER=root
 DB_PASSWORD=123456
