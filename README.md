@@ -37,7 +37,17 @@ INF24DW2G07M2/
 │   └── package.json
 └── README.md
 ```
+### Imagens Docker Publicadas
 
+As imagens Docker do projeto Spotify Web App (Parte 2) encontram-se disponíveis publicamente na conta da organização `inf24dw2g07` no DockerHub:
+
+- **Backend (Node.js + Express)**  
+  [https://hub.docker.com/r/inf24dw2g07/spotify-api](https://hub.docker.com/r/inf24dw2g07/spotify-api)
+
+- **Frontend (React.js)**  
+  [https://hub.docker.com/r/inf24dw2g07/spotify-frontend](https://hub.docker.com/r/inf24dw2g07/spotify-frontend)
+
+Estas imagens permitem a execução da aplicação completa sem necessidade de configuração local, bastando o uso de `docker pull` e `docker run` com os repositórios públicos.
 ---
 
 ## Configurações de Variaveis de Ambiente
