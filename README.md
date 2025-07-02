@@ -1,16 +1,18 @@
 # inf24dw2g07m2
 
-Desenvolvimento de uma Aplicação Web Cliente de Spotify (React App + Backend Node.js)
+Aplicação Web Cliente de Spotify (React + Node.js + MySQL)
 
-Este projeto simula uma aplicação semelhante ao Spotify, construída com **React.js** no frontend e **Node.js + Express** no backend. A autenticação é feita com a API oficial do Spotify (OAuth 2.0).
+Projeto acadêmico que consiste no desenvolvimento de uma aplicação fullstack com frontend em React.js e backend em Node.js + Express, utilizando autenticação OAuth 2.0 do Spotify e integração com banco de dados MySQL. Todo o ambiente é dockerizado para facilitar o desenvolvimento e deploy.
+
 
 ---
 
-## Requisitos
-
-- Node.js **v18** ou superior  
-- Conta Spotify Developer  
-- Navegador moderno (Chrome, Firefox, etc.)
+## Pré- Requisitos
+- Node.js v18+
+- Conta Spotify Developer
+- Docker e Docker Compose
+- Navegador moderno (Chrome, Firefox etc.)
+- Conta Spotify para testes OAuth2
 
 ---
 
@@ -18,72 +20,88 @@ Este projeto simula uma aplicação semelhante ao Spotify, construída com **Rea
 
 ```
 INF24DW2G07M2/
-├── backend/                   Backend (Node.js + Express)
-│   ├── .env                   Variáveis de ambiente do backend
-│   └── index.js               Ponto de entrada do servidor Express
-
-├── cliente/                   Frontend React
-│   ├── node_modules/          Módulos do cliente (React)
-│   ├── public/                Ficheiros estáticos (favicon, etc.)
-│   ├── src/                   Código-fonte React
-│   ├── .env                   Variáveis de ambiente do React
-│   ├── package.json           Dependências do cliente
-│   └── postcss.config.js      (Se for usar Tailwind ou pós-processamento)
-
-├── node_modules/              Dependências do projeto raiz (caso uses nodemon ou outras libs globais)
-├── .gitignore                 Ignora `node_modules`, `.env`, etc.
-├── package.json               (raiz, se usado para ferramentas do projeto geral)
-├── README.md                  Manual de instalação e instruções — está na raiz, correto.
+├── backend/              # API RESTful com Node.js
+│   ├── config/
+│   ├── environment/
+│   ├── migrations/
+│   ├── models/
+│   ├── routes/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── index.js
+│   └── seedArtistas.js   # Popular o banco de dados
+├── cliente/              # Aplicação React
+│   ├── public/
+│   ├── src/
+│   ├── Dockerfile
+│   └── package.json
+└── README.md
 ```
 
 ---
 
-## Variáveis de Ambiente
+## Configurações de Variaveis de Ambiente
 
 ### `backend/.env`
 
 ```
-CLIENT_ID=seu_client_id_do_spotify
-CLIENT_SECRET=seu_client_secret
+CLIENT_ID=d9615679be5f4c0d97b0cf399efecce4 
+CLIENT_SECRET=b7f1d1abf70c49468c7aebdea5cb25a8
 REDIRECT_URI=http://localhost:5000/callback
 FRONTEND_URI=http://localhost:3000
+
+DB_HOST=mysql-db
+DB_USER=root
+DB_PASSWORD=123456
+DB_NAME=spotifydb
+DB_PORT=3306
+DB_DIALECT=mysql
 ```
 
 ### `cliente/.env`
 
-```
-REACT_APP_SPOTIFY_CLIENT_ID=seu_client_id_do_spotify
-REACT_APP_SPOTIFY_REDIRECT_URI=http://localhost:5000/login
-```
+REACT_APP_SPOTIFY_CLIENT_ID=d9615679be5f4c0d97b0cf399efecce4
+" CLIENT_SECRET=b7f1d1abf70c49468c7aebdea5cb25a8 "
+REACT_APP_SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/callback
+" FRONTEND_URI=http://localhost:3000 "
 
->  **Importante**: Não inclua aspas nem espaços extras nos valores.
+**Importante**: Não inclua aspas nem espaços extras nos valores.
 
 ---
 
-## Como Rodar o Projeto
+## Como Executar o Projeto
 
-### 1. Backend (Node.js)
+### 1. Na pasta Backend 
 
 ```bash
 cd backend
 npm install
 docker-compose up --build
-```
 
+"Esse comando irá:
+Construir as imagens Docker do backend e frontend.
+Subir os containers MySQL, API backend e frontend React.
+Criar e inicializar o banco de dados
+"
+```
+## Acesso a Aplicação
+Frontend: http://localhost:3000
+Backend API: http://localhost:5000
 O servidor será iniciado em: [http://localhost:5000](http://localhost:5000)
 
----
+## 2. Script para adicionar dados na Base de Dados
+```bash
+docker-compose exec spotify-api node seedArtistas.js
+```
 
-### 2. Frontend (React)
+### 3. Frontend-Cliente (alternativo ao uso via Docker)
 
 ```bash
 cd cliente
 npm install
 npm start
 ```
-
 A aplicação será aberta em: [http://localhost:3000](http://localhost:3000)
-
 ---
 
 ## Como Funciona o Login com Spotify
@@ -95,23 +113,35 @@ A aplicação será aberta em: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## Funcionalidades Incluídas
+## Funcionalidades Implementadas
 
 - Login com Spotify  
 - Registro do usuário no backend  
-- Visualizar top artistas  
-- Visualizar playlists  
-- Visualizar perfil  
-- Renovação automática de token (via `refresh_token`)  
+- Visualização de:
+        Top artistas  
+        Playlists  
+        Perfil do Usuário
+- Renovação automática de access_token (via `refresh_token`)  
 - Interface personalizada com CSS tradicional
 
 ---
 
-## Erros Comuns
+## Comandos Úteis
+
+# Subir containers (backend, frontend e DB, dentro do backend):
+docker-compose up --build
+# Parar e remover containers, redes e volumes:
+docker-compose down --volumes
+# Acessar container backend para executar comandos:
+docker-compose exec spotify-api bash
+# Popular o banco:
+docker-compose exec spotify-api node seedArtistas.js
+
+## Possíveis Problemas
 
 - **Token inválido ou expirado**: o app tenta renovar automaticamente  
-- **Erro CORS**: verifica se os valores no `.env` estão corretos  
-- **Falha ao compilar Tailwind**: este projeto **não usa Tailwind**, mas CSS clássico
+- **Erro CORS**: verifica se os valores no `.env` estão corretos,especialmente FRONTEND_URI  
+- **Falha ao compilar Tailwind**: este projeto **não usa Tailwind**, apenas CSS clássico.
 
 ---
 
@@ -126,4 +156,4 @@ A aplicação será aberta em: [http://localhost:3000](http://localhost:3000)
 
 ## Projeto Académico
 
-Este projeto foi desenvolvido no contexto da disciplina de **Desenvolvimento Web 2**, com foco na integração entre frontend e backend utilizando **OAuth 2.0** e **API RESTful**.
+Este projeto foi desenvolvido como parte da unidade curricular **Desenvolvimento Web 2**, com foco na integração entre **frontend e backend**, utilizando autenticação **OAuth 2.0 com Spotify** e **API RESTful**.

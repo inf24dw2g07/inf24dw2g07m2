@@ -2,7 +2,6 @@
 # Node.js / Express (Backend)
 # -------------------------
 backend/node_modules/
-backend/.env
 backend/.DS_Store
 backend/npm-debug.log*
 

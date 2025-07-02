@@ -19,6 +19,9 @@ FROM nginx:alpine
 # Copia o build para a pasta padrão do nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copia o arquivo de configuração customizado para o nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expõe a porta 3000 (ou 80, nginx usa 80 por padrão)
 EXPOSE 80
 
